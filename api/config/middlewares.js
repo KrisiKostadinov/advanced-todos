@@ -30,7 +30,26 @@ const isAuthenticated = (req, res, next) => {
   next();
 };
 
+const isGuest = (req, res, next) => {
+  const token_data = req.headers.authorization;
+  
+  if (token_data) {
+    const splittedToken = token_data.split("Bearer ");
+    const token = splittedToken[1];
+    
+    if (verifyToken(token)) {
+      res
+        .status(status_codes.BAD_REQUEST)
+        .send(prepareError({ message: messages.YOU_MUST_BE_LOGGED_OUT }));
+      return;
+    }
+  }
+
+  next();
+}
+
 module.exports = {
   errorHandler,
   isAuthenticated,
+  isGuest,
 };

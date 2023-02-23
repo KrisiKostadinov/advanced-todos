@@ -11,6 +11,7 @@ module.exports = {
     SERVER_WORKS: "Server works!",
     INVALID_CREDENTIALS: "Invalid username or password!",
     NOT_AUTHORIZED: "You are not authorized!",
+    YOU_MUST_BE_LOGGED_OUT: "You must be logged out to access this."
   },
 
   // status codes
