@@ -1,4 +1,6 @@
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
+
 const { DEVELOPMENT } = require("./constants");
 
 const prepareSuccess = (data) => {
@@ -16,9 +18,14 @@ const prepareError = (err) => {
   };
 };
 
+const verifyToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+}
+
 const response = {
   prepareSuccess,
   prepareError,
+  verifyToken,
 };
 
 module.exports = response;

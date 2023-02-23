@@ -10,6 +10,7 @@ module.exports = {
     SERVER_STARTED: "Server started on port:",
     SERVER_WORKS: "Server works!",
     INVALID_CREDENTIALS: "Invalid username or password!",
+    NOT_AUTHORIZED: "You are not authorized!",
   },
 
   // status codes
@@ -18,6 +19,7 @@ module.exports = {
     OK: 200,
     NOT_FOUND: 404,
     CONFLICT: 409,
+    NOT_AUTHORIZED: 403,
     SERVER_ERROR: 500,
     BAD_REQUEST: 400,
   },
