@@ -1,8 +1,13 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 
 const { prepareSuccess, prepareError } = require("../config/functions");
-const { HASH_SALT_ROUNDS, status_codes } = require("../config/constants");
+const {
+  HASH_SALT_ROUNDS,
+  status_codes,
+  messages,
+} = require("../config/constants");
 const User = require("../models/User.model");
 
 const register = asyncHandler(async (req, res) => {
@@ -31,7 +36,34 @@ const register = asyncHandler(async (req, res) => {
   res.status(status_codes.CREATED).send(prepareSuccess(response));
 });
 
-const login = async (req, res) => {};
+const login = asyncHandler(async (req, res) => {
+  const body = req.body;
+
+  const existingUser = await User.findOne({ username: body.username });
+
+  if (!existingUser) {
+    res
+      .status(status_codes.BAD_REQUEST)
+      .send(prepareError({ message: messages.INVALID_CREDENTIALS }));
+  }
+
+  const user = existingUser;
+
+  const validPassword = await bcrypt.compare(body.password, user.password);
+  if (!validPassword) {
+    res
+      .status(status_codes.BAD_REQUEST)
+      .send(prepareError({ message: messages.INVALID_CREDENTIALS }));
+  }
+
+  const token = jwt.sign(
+    { _id: user._id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  res.status(status_codes.OK).send(prepareSuccess({ token }));
+});
 
 module.exports = {
   register,

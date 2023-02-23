@@ -9,6 +9,7 @@ module.exports = {
     CONNECTION_ERROR: "Connection error",
     SERVER_STARTED: "Server started on port:",
     SERVER_WORKS: "Server works!",
+    INVALID_CREDENTIALS: "Invalid username or password!",
   },
 
   // status codes
@@ -18,10 +19,15 @@ module.exports = {
     NOT_FOUND: 404,
     CONFLICT: 409,
     SERVER_ERROR: 500,
+    BAD_REQUEST: 400,
   },
 
   // routes
-  ruotes_texts: {
-    ROUTES: "/users",
+  ruotes_constats: {
+    users: {
+      INITIAL: "/users",
+      REGISTER: "/register",
+      LOGIN: "/login",
+    },
   }
 };

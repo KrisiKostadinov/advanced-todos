@@ -14,7 +14,7 @@ const { usersRouter } = require("./routes/index.js");
 const {
   DEVELOPMENT,
   messages,
-  ruotes_texts,
+  ruotes_constats,
 } = require("./config/constants.js");
 
 const PORT = process.env.PORT || 3000;
@@ -42,7 +42,7 @@ connection
     app.get("/", (req, res) => {
       res.send(messages.SERVER_WORKS);
     });
-    app.use(`${ruotes_texts.USERS}`, usersRouter);
+    app.use(`${ruotes_constats.users.INITIAL}`, usersRouter);
 
     app.use(errorHandler);
 
