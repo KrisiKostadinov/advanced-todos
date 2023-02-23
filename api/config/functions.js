@@ -24,8 +24,10 @@ const verifyToken = (token) => {
 
 const response = {
   prepareSuccess,
-  prepareError,
-  verifyToken,
+  prepareError
 };
 
-module.exports = response;
+module.exports = {
+  ...response,
+  verifyToken,
+}

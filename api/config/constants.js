@@ -11,7 +11,12 @@ module.exports = {
     SERVER_WORKS: "Server works!",
     INVALID_CREDENTIALS: "Invalid username or password!",
     NOT_AUTHORIZED: "You are not authorized!",
-    YOU_MUST_BE_LOGGED_OUT: "You must be logged out to access this."
+    YOU_MUST_BE_LOGGED_OUT: "You must be logged out to access this.",
+    FILE_UPLOADED: "File uploded successfully",
+  },
+
+  paths: {
+    UPLOADS: "public/uploads",
   },
 
   // status codes
@@ -26,11 +31,12 @@ module.exports = {
   },
 
   // routes
-  ruotes_constats: {
+  routes_constants: {
     users: {
       INITIAL: "/users",
       REGISTER: "/register",
       LOGIN: "/login",
     },
+    upload: "/upload"
   }
 };

@@ -1,20 +1,21 @@
 require("dotenv").config();
 const colors = require("colors");
-const morgan = require("morgan");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const fs = require("fs");
-const path = require("path");
 
-const connection = require("./config/db.js");
 const { errorHandler } = require("./config/middlewares.js");
+const logger = require("./config/logger.js");
 
 const { usersRouter } = require("./routes/index.js");
+const uploadController = require("./controllers/upload.controller.js");
+
+const connection = require("./config/db.js");
+
 const {
   DEVELOPMENT,
   messages,
-  ruotes_constats,
+  routes_constants,
 } = require("./config/constants.js");
 
 const PORT = process.env.PORT || 3000;
@@ -26,23 +27,19 @@ connection
     }
     const app = express();
 
+    // middlewares
     app.use(cors());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(
-      morgan("common", {
-        stream: fs.createWriteStream(path.join(__dirname, "logs/all.log"), {
-          flags: "a",
-        }),
-      })
-    );
+    app.use("static", express.static("public"));
+    app.use(logger);
 
     // routes
-
     app.get("/", (req, res) => {
       res.send(messages.SERVER_WORKS);
     });
-    app.use(`${ruotes_constats.users.INITIAL}`, usersRouter);
+    app.use(routes_constants.upload, uploadController);
+    app.use(`${routes_constants.users.INITIAL}`, usersRouter);
 
     app.use(errorHandler);
 
