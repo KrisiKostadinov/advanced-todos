@@ -8,6 +8,9 @@ const fs = require("fs");
 const path = require("path");
 
 const connection = require("./config/db.js");
+const { errorHandler } = require("./config/middlewares.js");
+
+const { usersRouter } = require("./routes/index.js");
 
 const PORT = process.env.PORT || 3000;
 
@@ -29,9 +32,14 @@ connection
       })
     );
 
+    // routes
+    
     app.get("/", (req, res) => {
       res.send("Server works!");
     });
+    app.use("/users", usersRouter);
+
+    app.use(errorHandler);
 
     app.listen(PORT, () => {
       if (process.env.NODE_ENV === "development") {
