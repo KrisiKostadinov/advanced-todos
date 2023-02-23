@@ -11,13 +11,18 @@ const connection = require("./config/db.js");
 const { errorHandler } = require("./config/middlewares.js");
 
 const { usersRouter } = require("./routes/index.js");
+const {
+  DEVELOPMENT,
+  messages,
+  ruotes_texts,
+} = require("./config/constants.js");
 
 const PORT = process.env.PORT || 3000;
 
 connection
   .then(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log(colors.green("Connected to db"));
+    if (process.env.NODE_ENV === DEVELOPMENT) {
+      console.log(colors.green(messages.CONNECTED_TO_DB));
     }
     const app = express();
 
@@ -33,25 +38,25 @@ connection
     );
 
     // routes
-    
+
     app.get("/", (req, res) => {
-      res.send("Server works!");
+      res.send(messages.SERVER_WORKS);
     });
-    app.use("/users", usersRouter);
+    app.use(`${ruotes_texts.USERS}`, usersRouter);
 
     app.use(errorHandler);
 
     app.listen(PORT, () => {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === DEVELOPMENT) {
         console.log(
-          colors.green("Server started on port: ") + colors.yellow(PORT)
+          colors.green(`${messages.SERVER_STARTED} ${colors.yellow(PORT)}`)
         );
       }
     });
   })
   .catch((error) => {
-    if (process.env.NODE_ENV === "development") {
-      console.log(colors.red("Connection error"));
+    if (process.env.NODE_ENV === DEVELOPMENT) {
+      console.log(colors.red(messages.CONNECTION_ERROR));
       console.log(colors.red(error));
     }
   });
