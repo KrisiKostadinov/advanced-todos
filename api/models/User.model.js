@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ROLE_ADMINISTRATIOR, ROLE_USER } = require("../config/constants");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -24,6 +25,10 @@ const UserSchema = new mongoose.Schema(
     img: {
       type: String,
     },
+    role_as: {
+      type: String,
+      enum: [ROLE_ADMINISTRATIOR, ROLE_USER]
+    }
   },
   {
     timestamps: true,

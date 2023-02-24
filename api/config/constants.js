@@ -2,6 +2,8 @@ module.exports = {
   DEVELOPMENT: "development",
   PRODUCTION: "production",
   HASH_SALT_ROUNDS: 10,
+  ROLE_ADMINISTRATIOR: "administrator",
+  ROLE_USER: "user",
 
   // messages
   messages: {
@@ -13,6 +15,7 @@ module.exports = {
     NOT_AUTHORIZED: "You are not authorized!",
     YOU_MUST_BE_LOGGED_OUT: "You must be logged out to access this.",
     FILE_UPLOADED: "File uploded successfully",
+    INVALID_ID: "Invalid id",
   },
 
   paths: {
@@ -36,6 +39,8 @@ module.exports = {
       INITIAL: "/users",
       REGISTER: "/register",
       LOGIN: "/login",
+      GET: "/:id",
+      GET_ALL: "/all",
     },
     upload: "/upload"
   }

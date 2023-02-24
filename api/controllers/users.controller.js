@@ -65,7 +65,33 @@ const login = asyncHandler(async (req, res) => {
   res.status(status_codes.OK).send(prepareSuccess({ token }));
 });
 
+const getUser = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res
+      .status(status_codes.NOT_FOUND)
+      .send(prepareError({ message: messages.INVALID_ID }));
+  }
+
+  const user = await User.findById(id);
+
+  if (!id) {
+    return res
+      .status(status_codes.NOT_FOUND)
+      .send(prepareError({ message: messages.INVALID_ID }));
+  }
+
+  res.status(status_codes.OK).send(prepareError(user));
+});
+
+const getAll = asyncHandler(async (req, res) => {
+  const users = await User.find();
+  res.status(status_codes.OK).send(prepareSuccess(users));
+});
+
 module.exports = {
   register,
   login,
+  getUser,
+  getAll,
 };
