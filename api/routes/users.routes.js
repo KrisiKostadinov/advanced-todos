@@ -1,13 +1,24 @@
 const usersRouter = require("express").Router();
 
-const { routes_constants } = require("../config/constants");
-const { isGuest, isAuthenticated, isAdmin } = require("../config/middlewares");
-const { register, login, getUser, getAll } = require("../controllers/users.controller");
+const { isGuest, isAuthenticated } = require("../config/middlewares");
+const {
+  register,
+  login,
+  getItem,
+  getItems,
+  getLoggedItem,
+  saveItem,
+  deleteItem,
+} = require("../controllers/users.controller");
 
-usersRouter.get(routes_constants.users.GET_ALL, isAuthenticated, isAdmin, getAll);
-usersRouter.get(routes_constants.users.GET, isAuthenticated, isAdmin, getUser);
+usersRouter.get("/all", isAuthenticated, getItems);
+usersRouter.get("/:id", isAuthenticated, getItem);
+usersRouter.get("/", isAuthenticated, getLoggedItem);
 
-usersRouter.post(routes_constants.users.REGISTER, isGuest, register);
-usersRouter.post(routes_constants.users.LOGIN, isGuest, login);
+usersRouter.post("/register", isGuest, register);
+usersRouter.post("/login", isGuest, login);
+usersRouter.post("/", isAuthenticated, saveItem);
+
+usersRouter.delete("/", isAuthenticated, deleteItem);
 
 module.exports = usersRouter;

@@ -10,6 +10,7 @@ const {
 } = require("../config/constants");
 const User = require("../models/User.model");
 
+// post actions
 const register = asyncHandler(async (req, res) => {
   const body = req.body;
 
@@ -33,7 +34,7 @@ const register = asyncHandler(async (req, res) => {
   const response = createdUser._doc;
   delete response.password;
 
-  res.status(status_codes.CREATED).send(prepareSuccess(response));
+  return res.status(status_codes.CREATED).send(prepareSuccess(response));
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -62,14 +63,42 @@ const login = asyncHandler(async (req, res) => {
     { expiresIn: "1h" }
   );
 
-  res.status(status_codes.OK).send(prepareSuccess({ token }));
+  return res.status(status_codes.OK).send(prepareSuccess({ token }));
 });
 
-const getUser = asyncHandler(async (req, res) => {
+const saveItem = asyncHandler(async (req, res) => {
+  const id = req.user._id;
+  const body = req.body;
+
+  if (!id) {
+    return res
+      .status(status_codes.BAD_REQUEST)
+      .send(prepareError({ message: messages.INVALID_ID }));
+  }
+
+  const updatedItem = await User.findByIdAndUpdate(
+    id,
+    {
+      $set: { ...body },
+    },
+    { new: true }
+  );
+
+  if (!updatedItem) {
+    return res
+      .status(status_codes.BAD_REQUEST)
+      .send(prepareError({ message: messages.INVALID_ID }));
+  }
+
+  return res.status(status_codes.OK).send(prepareSuccess(updatedItem));
+});
+
+// get actions
+const getItem = asyncHandler(async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res
-      .status(status_codes.NOT_FOUND)
+      .status(status_codes.BAD_REQUEST)
       .send(prepareError({ message: messages.INVALID_ID }));
   }
 
@@ -77,21 +106,58 @@ const getUser = asyncHandler(async (req, res) => {
 
   if (!id) {
     return res
-      .status(status_codes.NOT_FOUND)
+      .status(status_codes.BAD_REQUEST)
       .send(prepareError({ message: messages.INVALID_ID }));
   }
 
-  res.status(status_codes.OK).send(prepareError(user));
+  return res.status(status_codes.OK).send(prepareError(user));
 });
 
-const getAll = asyncHandler(async (req, res) => {
+const getItems = asyncHandler(async (req, res) => {
   const users = await User.find();
-  res.status(status_codes.OK).send(prepareSuccess(users));
+  return res.status(status_codes.OK).send(prepareSuccess(users));
+});
+
+const getLoggedItem = asyncHandler(async (req, res) => {
+  const loggedInUser = req.user;
+  if (!loggedInUser) {
+    return res
+      .status(status_codes.NOT_AUTHORIZED)
+      .send(prepareError({ message: messages.NOT_AUTHORIZED }));
+  }
+
+  const user = await User.findById(loggedInUser._id);
+
+  if (!user) {
+    return res
+      .status(status_codes.NOT_AUTHORIZED)
+      .send(prepareError({ message: messages.NOT_AUTHORIZED }));
+  }
+
+  return res.status(status_codes.OK).send(prepareSuccess(user));
+});
+
+const deleteItem = asyncHandler(async (req, res) => {
+  const id = req.user._id;
+
+  if (id) {
+    return res
+      .status(status_codes.BAD_REQUEST)
+      .send(prepareError({ message: messages.INVALID_ID }));
+  }
+
+  await User.findByIdAndDelete(id);
+  return res
+    .status(status_codes.OK)
+    .send(prepareSuccess({ message: messages.DELETED }));
 });
 
 module.exports = {
   register,
   login,
-  getUser,
-  getAll,
+  saveItem,
+  getItem,
+  getItems,
+  getLoggedItem,
+  deleteItem,
 };

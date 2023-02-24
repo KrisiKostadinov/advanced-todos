@@ -11,11 +11,14 @@ module.exports = {
     CONNECTION_ERROR: "Connection error",
     SERVER_STARTED: "Server started on port:",
     SERVER_WORKS: "Server works!",
+
     INVALID_CREDENTIALS: "Invalid username or password!",
     NOT_AUTHORIZED: "You are not authorized!",
     YOU_MUST_BE_LOGGED_OUT: "You must be logged out to access this.",
     FILE_UPLOADED: "File uploded successfully",
     INVALID_ID: "Invalid id",
+    DELETED: "Successfully deleted.",
+    UPDATED: "Successfully updated."
   },
 
   paths: {
@@ -32,16 +35,4 @@ module.exports = {
     SERVER_ERROR: 500,
     BAD_REQUEST: 400,
   },
-
-  // routes
-  routes_constants: {
-    users: {
-      INITIAL: "/users",
-      REGISTER: "/register",
-      LOGIN: "/login",
-      GET: "/:id",
-      GET_ALL: "/all",
-    },
-    upload: "/upload"
-  }
 };
